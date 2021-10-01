@@ -1,7 +1,7 @@
 def dijsktra(graph, start, end):
     # shortest paths is a dict of nodes
     # whose value is a tuple of (previous node, weight)
-    shortest_paths = {start: (None, 0)}
+    shortest_paths = {start: (None, [0, 0])}
     energybudget = 287932
     current_node = start
     visited = set()
@@ -11,16 +11,22 @@ def dijsktra(graph, start, end):
     while current_node != end:
       visited.add(current_node)
       destinations = graph.edges[current_node]
-      weight_to_current_node = shortest_paths[current_node][1]
+      weight_to_current_node = shortest_paths[current_node][1][0]
+      energy_to_current_node = shortest_paths[current_node][1][1]
+      print(weight_to_current_node)
 
       for next_node in destinations:
         weight = graph.weights[(current_node, next_node)][0] + weight_to_current_node
+        energy = graph.weights[(current_node, next_node)][1] + energy_to_current_node
+
         if next_node not in shortest_paths:
-          shortest_paths[next_node] = (current_node, weight)
+          shortest_paths[next_node] = (current_node, [weight, energy])
+
         else:
-          current_shortest_weight = shortest_paths[next_node][1]
+          temp = shortest_paths[next_node]
+          current_shortest_weight = temp[1][0]
           if current_shortest_weight > weight:
-            shortest_paths[next_node] = (current_node, weight)
+            shortest_paths[next_node] = (current_node, [weight,energy])
 
       next_destinations = {node: shortest_paths[node] for node in shortest_paths if node not in visited}
       if not next_destinations:
@@ -37,11 +43,14 @@ def dijsktra(graph, start, end):
       # print(current_node, next_node)
 
       if next_node is not None:
+        totalenergy += graph.weights[(current_node,next_node)][1]
         distance += graph.weights[(current_node, next_node)][0]
+
 
       current_node = next_node
 
     # Reverse path
     path = path[::-1]
-    print("Total : ", distance)
+    print('Total Energy: ', totalenergy)
+    print("Total Distance: ", distance)
     print(*path, sep=' -> ')

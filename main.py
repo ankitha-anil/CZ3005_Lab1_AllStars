@@ -33,41 +33,41 @@ class Graph():
     #     self.weights[(to_node, from_node)] = weight
 
 
-with open("content/Dist.json", "r") as json_file:
-    distdata = json.load(json_file)
-
-    distlist = []
-    for (key, values) in distdata.items():
-        list1 = key.split(',')
-        list1.append(values)
-        distlist.append(tuple(list1))
-    # print(distlist)
-
-with open("content/Cost.json", "r") as json_file:
-    costdata = json.load(json_file)
-
-    costlist = []
-    for (key, values) in costdata.items():
-        list1 = key.split(',')
-        list1.append(values)
-        costlist.append(tuple(list1))
-    # print(costlist)
-
-with open("content/Dist.json", "r") as dist_file, \
-        open("content/Cost.json", "r") as cost_file, \
-        open("content/G.json", "r") as g_file:
-    distdata = json.load(dist_file)
-    costdata = json.load(cost_file)
-    graphjson = json.load(g_file)
-    mainlist = {}
-    for key, value in graphjson.items():
-        key_value = {}
-        for node in value:
-            key_value[node] = [distdata[key + "," + node], costdata[key + "," + node]]
-        mainlist[key] = key_value
-
-    first5pairs_mainlist = {i: mainlist[i] for i in list(mainlist)[:5]}
-    print(first5pairs_mainlist)
+# with open("content/Dist.json", "r") as json_file:
+#     distdata = json.load(json_file)
+#
+#     distlist = []
+#     for (key, values) in distdata.items():
+#         list1 = key.split(',')
+#         list1.append(values)
+#         distlist.append(tuple(list1))
+#     # print(distlist)
+#
+# with open("content/Cost.json", "r") as json_file:
+#     costdata = json.load(json_file)
+#
+#     costlist = []
+#     for (key, values) in costdata.items():
+#         list1 = key.split(',')
+#         list1.append(values)
+#         costlist.append(tuple(list1))
+#     # print(costlist)
+#
+# with open("content/Dist.json", "r") as dist_file, \
+#         open("content/Cost.json", "r") as cost_file, \
+#         open("content/G.json", "r") as g_file:
+#     distdata = json.load(dist_file)
+#     costdata = json.load(cost_file)
+#     graphjson = json.load(g_file)
+#     mainlist = {}
+#     for key, value in graphjson.items():
+#         key_value = {}
+#         for node in value:
+#             key_value[node] = [distdata[key + "," + node], costdata[key + "," + node]]
+#         mainlist[key] = key_value
+#
+#     first5pairs_mainlist = {i: mainlist[i] for i in list(mainlist)[:5]}
+#     print(first5pairs_mainlist)
 
 with open("content/Dist.json","r") as dist_file:
     with open("content/Cost.json","r") as cost_file:
@@ -85,13 +85,13 @@ with open("content/Dist.json","r") as dist_file:
 
 
 
-distgraph = Graph()
-for edge in distlist:
-    distgraph.add_edge(*edge)
-
-costgraph = Graph()
-for edge in costlist:
-    costgraph.add_edge(*edge)
+# distgraph = Graph()
+# for edge in distlist:
+#     distgraph.add_edge(*edge)
+#
+# costgraph = Graph()
+# for edge in costlist:
+#     costgraph.add_edge(*edge)
 
 combinedgraph = Graph()
 for edge in combinedlist:
@@ -106,21 +106,10 @@ while choice != "exit":
     choice = input()
     if choice == "1":
         print("Shortest Path based on Distance: ")
-        print(distgraph)
-        dijkstra.dijsktra(distgraph, '1', '50')
+        #dijkstra.dijsktra(distgraph, '1', '50')
     elif choice == "2":
         print("Shortest path based on cost:")
-        dijkstra.dijsktra(costgraph, '1', '50')
+       # dijkstra.dijsktra(costgraph, '1', '50')
     elif choice =="3":
-        content.Test.dijkstra(mainlist, '1', '50')
-    elif choice =='4':
-        print(combinedgraph.edges)
-    elif choice =='5':
-        print(combinedgraph.weights)
-    elif choice =='6':
-        print(distgraph.edges)
-    elif choice == '7':
-        print(distgraph.weights)
-    elif choice == '8':
         dijkstra_budget.dijsktra(combinedgraph,'1','50')
 
