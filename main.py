@@ -33,16 +33,16 @@ class Graph():
     #     self.weights[(to_node, from_node)] = weight
 
 
-# with open("content/Dist.json", "r") as json_file:
-#     distdata = json.load(json_file)
-#
-#     distlist = []
-#     for (key, values) in distdata.items():
-#         list1 = key.split(',')
-#         list1.append(values)
-#         distlist.append(tuple(list1))
-#     # print(distlist)
-#
+with open("content/Dist.json", "r") as json_file:
+    distdata = json.load(json_file)
+
+    distlist = []
+    for (key, values) in distdata.items():
+        list1 = key.split(',')
+        list1.append(values)
+        distlist.append(tuple(list1))
+    # print(distlist)
+
 # with open("content/Cost.json", "r") as json_file:
 #     costdata = json.load(json_file)
 #
@@ -51,7 +51,7 @@ class Graph():
 #         list1 = key.split(',')
 #         list1.append(values)
 #         costlist.append(tuple(list1))
-#     # print(costlist)
+    # print(costlist)
 #
 # with open("content/Dist.json", "r") as dist_file, \
 #         open("content/Cost.json", "r") as cost_file, \
@@ -69,26 +69,24 @@ class Graph():
 #     first5pairs_mainlist = {i: mainlist[i] for i in list(mainlist)[:5]}
 #     print(first5pairs_mainlist)
 
-with open("content/Dist.json","r") as dist_file:
-    with open("content/Cost.json","r") as cost_file:
+with open("content/Dist.json", "r") as dist_file:
+    with open("content/Cost.json", "r") as cost_file:
         distdata = json.load(dist_file)
         costdata = json.load(cost_file)
         combinedlist = []
         for (key, values) in distdata.items():
             cost = costdata[key]
-            combined = [values,cost]
+            combined = [values, cost]
             list1 = key.split(',')
             list1.append(combined)
-            #print(list1)
+            # print(list1)
             combinedlist.append(tuple(list1))
-    #print(combinedlist)
+    # print(combinedlist)
 
+distgraph = Graph()
+for edge in distlist:
+    distgraph.add_edge(*edge)
 
-
-# distgraph = Graph()
-# for edge in distlist:
-#     distgraph.add_edge(*edge)
-#
 # costgraph = Graph()
 # for edge in costlist:
 #     costgraph.add_edge(*edge)
@@ -101,15 +99,23 @@ choice = 0
 while choice != "exit":
     print("What do you want to do?")
     print("1. Shortest Distance Path (No Constraints)")
-    print("2. Shortest Cost Path (No Constraints)")
+    print("2. Shortest Distance with Constraints")
+    print("3. Shortest Distance using A*Star w/ Constraints")
     print("exit")
     choice = input()
     if choice == "1":
-        print("Shortest Path based on Distance: ")
-        #dijkstra.dijsktra(distgraph, '1', '50')
+        start = str(input("Input Start Point: "))
+        end = str(input("Input End Point: "))
+        dijkstra.dijsktra(distgraph, start, end)
     elif choice == "2":
-        print("Shortest path based on cost:")
-       # dijkstra.dijsktra(costgraph, '1', '50')
-    elif choice =="3":
-        dijkstra_budget.dijsktra(combinedgraph,'1','50')
-
+        start = str(input("Input Start Point: "))
+        end = str(input("Input End Point: "))
+        budget = int(input("Input Budget of Path: "))
+        dijkstra_budget.dijsktra(combinedgraph, start, end, budget)
+    elif choice == "3":
+        start = str(input("Input Start Point: "))
+        end = str(input("Input End Point: "))
+        budget = int(input("Input Budget of Path: "))
+        print("Running")
+    elif choice == "exit":
+        exit(0)
