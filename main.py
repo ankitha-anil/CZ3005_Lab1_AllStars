@@ -2,6 +2,7 @@ import json
 from collections import defaultdict
 import networkx as nx
 import content.Test
+import A_Star
 import dijkstra
 import dijkstra_budget
 
@@ -99,8 +100,9 @@ choice = 0
 while choice != "exit":
     print("What do you want to do?")
     print("1. Shortest Distance Path (No Constraints)")
-    print("2. Shortest Distance with Constraints")
+    print("2. Shortest Distance with Constraints ")
     print("3. Shortest Distance using A*Star w/ Constraints")
+    print("Budget for Lab is : 287932")
     print("exit")
     choice = input()
     if choice == "1":
@@ -112,10 +114,15 @@ while choice != "exit":
         end = str(input("Input End Point: "))
         budget = int(input("Input Budget of Path: "))
         dijkstra_budget.dijsktra(combinedgraph, start, end, budget)
+    # elif choice == "3":
+    #     start = str(input("Input Start Point: "))
+    #     end = str(input("Input End Point: "))
+    #     budget = int(input("Input Budget of Path: "))
+    #     A_Star.A_Star(combinedgraph, start, end, budget)
     elif choice == "3":
         start = str(input("Input Start Point: "))
         end = str(input("Input End Point: "))
         budget = int(input("Input Budget of Path: "))
-        print("Running")
+        content.Test.A_Star(combinedgraph, start, end, budget)
     elif choice == "exit":
         exit(0)

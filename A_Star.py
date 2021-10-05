@@ -82,7 +82,7 @@ import json
     # whose value is a tuple of (previous node, weight)
 
 def A_Star(graph, start, end, budget):    
-    shortest_paths = {start: (None, [0, 0, 0, 0])}#[weight, energy, h_cost, combined cost]
+    shortest_paths = {start: (None, [0, 0])}#[weight, energy, h_cost, combined cost]
     energybudget = budget
     current_node = start
     visited = set()
@@ -100,9 +100,9 @@ def A_Star(graph, start, end, budget):
             i+=1
 
 
-    print(h_cost[start])
-    print(h_cost[end])
-    print(h_cost['1219'])
+    # print(h_cost[start])
+    # print(h_cost[end])
+    # print(h_cost['1219'])
 
 
     
@@ -122,19 +122,18 @@ def A_Star(graph, start, end, budget):
             weight = graph.weights[(current_node, next_node)][0] + weight_to_current_node 
 ##            print("weight during for loop:",weight)
             energy = graph.weights[(current_node, next_node)][1] + energy_to_current_node
-            
             if energy > energybudget:
                 continue
-            print("next node:",next_node)
+            # print("next node:",next_node)
             if next_node not in shortest_paths:
-                print("current node",current_node)
+                # print("current node",current_node)
                 combined_cost = weight + h_cost[current_node]
                 shortest_paths[next_node] = (current_node, [weight, energy, h_cost[str(current_node)], combined_cost])
             else:
                 temp = shortest_paths[next_node]
                 current_shortest_weight = temp[1][0]
                 current_shortest_energy = temp[1][1]
-                current_combined_cost = temp[1][2]+ current_shortest_weight
+                current_combined_cost = temp[1][2] + current_shortest_weight
                 if (current_combined_cost > weight + h_cost[str(current_node)]):
 ##                    print("current shortest weight",current_shortest_weight)
 ##                    print("weight",weight)

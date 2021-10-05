@@ -1,94 +1,78 @@
-import sys
-import json
 import math
-from queue import Queue
+import json
+
+def A_Star(graph, start, end, budget):
+    # shortest paths is a dict of nodes
+    # whose value is a tuple of (previous node, weight)
+    with open("content/coord.json", "r") as coord_file:
+        coorddata = json.load(coord_file)
+        i=0
+        h_cost = {}
+        while(i<len(coorddata)):
+            h_cost[str(i+1)]= math.sqrt((math.pow((coorddata[str(i+1)][0] - coorddata[end][0]), 2) + math.pow((coorddata[str(i+1)][1] - coorddata[end][1]),2)))
+            i+=1
+
+    shortest_paths = {start: (None, [0, 0, 0])} #Prev Node,[Distance,Energy, FCost]
+    energybudget = budget
+    current_node = start
+    visited = set()
+    loopcount = 0
+    totalenergy = 0
+    distance = 0
 
 
 
 
-def dijkstra(graph, start, goal):
-    shortest_distance = {}
-    cost = {}
-    track_predecessor = {}
-    unseenNodes = graph
-    inf = 9999999
-    energy_budget = 287932
-    te = {}
-    track_path = []
+    while current_node != end:
+        visited.add(current_node)
+        destinations = graph.edges[current_node]
+        weight_to_current_node = shortest_paths[current_node][1][0]
+        energy_to_current_node = shortest_paths[current_node][1][1]
+        FCost_to_current_node = shortest_paths[current_node][1][2]
 
-    for node in unseenNodes:
-        shortest_distance[node] = inf
-        te[node] = inf
-    shortest_distance[start] = 0
-    te[start] = 0
+        for next_node in destinations:
+            weight = graph.weights[(current_node, next_node)][0] + weight_to_current_node
+            energy = graph.weights[(current_node, next_node)][1] + energy_to_current_node
+            finalcost = h_cost[str(next_node)] + weight
 
-    while unseenNodes:
-
-        min_distance_node = None
-
-        for node in unseenNodes:
-            if min_distance_node is None:
-                min_distance_node = node
-
-            elif shortest_distance[node] < shortest_distance[min_distance_node]:
-                min_distance_node = node
-
-        path_options = graph[min_distance_node].items()
-
-        #print(path_options)
-
-        for child_node, weight in path_options:
-            if weight[1] + te[min_distance_node] > energy_budget:
+            if energy > energybudget:
                 continue
-            ##          if weight[1] + te[min_distance_node] <= energy_budget:
-            ##                print("Total value within budget!")
-            if weight[0] + shortest_distance[min_distance_node] < shortest_distance[child_node]:
+            if next_node not in shortest_paths:
+                shortest_paths[next_node] = (current_node, [weight, energy, finalcost])
 
-                #print("Total Energy: ", te[child_node])
-                #if te[child_node] <= energy_budget:
-                shortest_distance[child_node] = weight[0] + shortest_distance[min_distance_node]
-                te[child_node] = weight[1] + te[min_distance_node]
-                track_predecessor[child_node] = min_distance_node
-                #else:
-                    #change value for impossible to distance 999
-                    #track_predecessor[child_node] = min_distance_node
-                #elif te[child_node] > energy_budget:
-                    #shortest_distance[child_node] = inf
+            else:
+                temp = shortest_paths[next_node]
+                current_shortest_weight = temp[1][0]
+                current_shortest_energy = temp[1][1]
+                shortest_hcost = temp[1][2]
+                if shortest_hcost > finalcost:
+                    shortest_paths[next_node] = (current_node, [weight, energy, finalcost])
+            loopcount += 1
+        next_destinations = {node: shortest_paths[node] for node in shortest_paths if node not in visited}
+        if not next_destinations:
+            return "Route Not Possible"
 
-        unseenNodes.pop(min_distance_node)
+        # next node is the destination with the lowest weight
+        current_node = min(next_destinations, key=lambda k: next_destinations[k][1][2])
 
-    currentNode = goal
+# mylist = [[7, 8], [1, 2, 3], [2, 5, 6]]
+# list(map(lambda x: x[1], mylist)) returns [8, 2 ,5]
+    # Work back through destinations in shortest path
+    path = []
+    while current_node is not None:
+        path.append(current_node)
+        next_node = shortest_paths[current_node][0]
+        # print(current_node, next_node)
 
-    while currentNode != start:
-        try:
-            track_path.insert(0, currentNode)
-            currentNode = track_predecessor[currentNode]
-        except KeyError:
-            print("Path is not reachable")
-            break
+        if next_node is not None:
+            totalenergy += graph.weights[(current_node, next_node)][1]
+            distance += graph.weights[(current_node, next_node)][0]
 
-    track_path.insert(0, start)
+        current_node = next_node
 
-    #if shortest_distance[goal] != inf:
-    if True:
-        print("Shortest distance is " + str(shortest_distance[goal]))
-        print("Optimal path is " + str(track_path))
-    else:
-        print("Infinite Distance!!")
-
-
-
-
-# graph = {
-#     '0': {'1': [4, 4], '7': [8, 8]},
-#     '1': {'0': [4, 4], '2': [8, 8], '7': [11, 11]},
-#     '2': {'1': [8, 8], '8': [2, 2], '3': [7, 7], '5': [4, 4]},
-#     '3': {'2': [7, 7], '4': [9, 1], '5': [14, 1]},
-#     '4': {'3': [9, 1], '5': [10, 100]},
-#     '5': {'2': [4, 4], '3': [14, 1], '4': [10, 100], '6': [2, 2]},
-#     '6': {'5': [2, 2], '7': [1, 1], '8': [6, 6]},
-#     '7': {'0': [8, 8], '1': [11, 11], '6': [1, 1], '8': [7, 7]},
-#     '8': {'2': [2, 2], '6': [6, 6], '7': [7, 7]}
-# }
-# dijkstra(graph, '0', '4')
-
+    # Reverse path
+    path = path[::-1]
+    print('Total Energy: ', totalenergy)
+    print("Total Distance: ", distance)
+    print("Loop Count: ", loopcount)
+    print(*path, sep=' -> ')

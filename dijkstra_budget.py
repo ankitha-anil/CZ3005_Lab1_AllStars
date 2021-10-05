@@ -6,6 +6,7 @@ def dijsktra(graph, start, end, budget):
     current_node = start
     visited = set()
     totalenergy = 0
+    loopcount = 0
     distance = 0
 
     while current_node != end:
@@ -28,13 +29,14 @@ def dijsktra(graph, start, end, budget):
                 current_shortest_energy = temp[1][1]
                 if current_shortest_weight > weight:
                     shortest_paths[next_node] = (current_node, [weight, energy])
-
+            loopcount += 1
         next_destinations = {node: shortest_paths[node] for node in shortest_paths if node not in visited}
         if not next_destinations:
             return "Route Not Possible"
 
         # next node is the destination with the lowest weight
-        current_node = min(next_destinations, key=lambda k: next_destinations[k][1])
+
+        current_node = min(next_destinations, key=lambda k: next_destinations[k][1][0])
 
     # Work back through destinations in shortest path
     path = []
@@ -53,4 +55,5 @@ def dijsktra(graph, start, end, budget):
     path = path[::-1]
     print('Total Energy: ', totalenergy)
     print("Total Distance: ", distance)
+    print("Loop Count: ", loopcount)
     print(*path, sep=' -> ')
