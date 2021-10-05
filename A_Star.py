@@ -89,7 +89,8 @@ def A_Star(graph, start, end, budget):
     totalenergy = 0
     distance = 0
     weight = 0
-    combined_cost = 0 
+    combined_cost = 0
+    count = 0
 
     with open("content/coord.json", "r") as coord_file:
         coorddata = json.load(coord_file)
@@ -135,10 +136,13 @@ def A_Star(graph, start, end, budget):
                 current_shortest_weight = temp[1][1]
                 current_shortest_energy = temp[1][2]
                 current_combined_cost = temp[1][3]+ current_shortest_weight
+                print(temp[1][3])
                 if (current_shortest_weight > weight):
 ##                    print("current shortest weight",current_shortest_weight)
 ##                    print("weight",weight)
-                    shortest_paths[next_node] = (current_node, [current_combined_cost, weight, energy, h_cost[str(current_node)]])
+                    count+=1
+                    print(count)
+                    shortest_paths[next_node] = (current_node, [(weight+h_cost[str(current_node)]), weight, energy, h_cost[str(current_node)]])
 
 
         next_destinations = {node: shortest_paths[node] for node in shortest_paths if node not in visited}
