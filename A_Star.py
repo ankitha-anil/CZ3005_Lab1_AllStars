@@ -82,7 +82,7 @@ import json
     # whose value is a tuple of (previous node, weight)
 
 def A_Star(graph, start, end, budget):    
-    shortest_paths = {start: (None, [0, 0, 0, 0])}#[weight, energy, h_cost, combined cost]
+    shortest_paths = {start: (None, [0, 0, 0, 0])}#[combined cost, weight, energy, h_cost]
     energybudget = budget
     current_node = start
     visited = set()
@@ -111,8 +111,8 @@ def A_Star(graph, start, end, budget):
         visited.add(current_node)
         destinations = graph.edges[current_node]
 
-        weight_to_current_node = shortest_paths[current_node][1][0] 
-        energy_to_current_node = shortest_paths[current_node][1][1]
+        weight_to_current_node = shortest_paths[current_node][1][1] 
+        energy_to_current_node = shortest_paths[current_node][1][2]
 ##        print("weight before for loop:",weight)
 
 
@@ -125,20 +125,20 @@ def A_Star(graph, start, end, budget):
             
             if energy > energybudget:
                 continue
-            print("next node:",next_node)
+##            print("next node:",next_node)
             if next_node not in shortest_paths:
-                print("current node",current_node)
+##                print("current node",current_node)
                 combined_cost = weight + h_cost[current_node]
-                shortest_paths[next_node] = (current_node, [weight, energy, h_cost[str(current_node)], combined_cost])
+                shortest_paths[next_node] = (current_node, [combined_cost, weight, energy, h_cost[str(current_node)]])
             else:
                 temp = shortest_paths[next_node]
-                current_shortest_weight = temp[1][0]
-                current_shortest_energy = temp[1][1]
-                current_combined_cost = temp[1][2]+ current_shortest_weight
-                if (current_combined_cost > weight + h_cost[str(current_node)]):
+                current_shortest_weight = temp[1][1]
+                current_shortest_energy = temp[1][2]
+                current_combined_cost = temp[1][3]+ current_shortest_weight
+                if (current_shortest_weight > weight):
 ##                    print("current shortest weight",current_shortest_weight)
 ##                    print("weight",weight)
-                    shortest_paths[next_node] = (current_node, [weight, energy, h_cost[str(current_node)], current_combined_cost])
+                    shortest_paths[next_node] = (current_node, [current_combined_cost, weight, energy, h_cost[str(current_node)]])
 
 
         next_destinations = {node: shortest_paths[node] for node in shortest_paths if node not in visited}
@@ -147,19 +147,20 @@ def A_Star(graph, start, end, budget):
 
         # next node is the destination with the lowest weight
         current_node = min(next_destinations, key=lambda k: next_destinations[k][1])
+##        print(next_destinations)
 
     # Work back through destinations in shortest path
     path = []
     while current_node is not None:
         path.append(current_node)
         next_node = shortest_paths[current_node][0]
-        print("shortest_paths[current_node]:",shortest_paths[current_node])
-        print(current_node, next_node)
+##        print("shortest_paths[current_node]:",shortest_paths[current_node])
+##        print(current_node, next_node)
 
         if next_node is not None:
-            totalenergy += graph.weights[(current_node, next_node)][1]
             distance += graph.weights[(current_node, next_node)][0]
-
+            totalenergy += graph.weights[(current_node, next_node)][1]
+            
         current_node = next_node
 
     # Reverse path
