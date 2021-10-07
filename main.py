@@ -6,10 +6,10 @@ import load_Data
 print("Loading information...")
 
 #Graph for Task 1 and Task 2
-distgraph = load_Data.loadDistgraph()
+distgraph = load_Data.loadDistGraph()
 
 # Graph for Task 3
-combinedgraph = load_Data.loadcombinedGraph()
+combinedgraph = load_Data.loadCombinedGraph()
 
 print("Completed loading.\n")
 

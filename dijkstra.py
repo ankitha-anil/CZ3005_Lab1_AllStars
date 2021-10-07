@@ -28,7 +28,7 @@ def dijsktra(graph, start, end):
             return "Route Not Possible"
 
         # next node is the destination with the lowest weight
-        current_node = min(next_destinations, key=lambda k: next_destinations[k][1])
+        current_node = min(next_destinations, key= lambda k: next_destinations[k][1])
 
     # Work back through destinations in shortest path
     path = []
@@ -44,6 +44,7 @@ def dijsktra(graph, start, end):
 
     # Reverse path
     path = path[::-1]
-    print("Total Distance: ", distance, end='\n\n')
+    print("Shortest path: ", end=' ')
     print(*path, sep=' -> ', end='\n\n')
+    print("Shortest Distance: ", distance, end='\n\n')
     print("Completed task.\n\n")

@@ -30,6 +30,7 @@ def dijsktra_Budget(graph, start, end, budget):
                 if current_shortest_weight > weight:
                     shortest_paths[next_node] = (current_node, [weight, energy])
             loopcount += 1
+
         next_destinations = {node: shortest_paths[node] for node in shortest_paths if node not in visited}
         if not next_destinations:
             return "Route Not Possible"
@@ -53,8 +54,9 @@ def dijsktra_Budget(graph, start, end, budget):
 
     # Reverse path
     path = path[::-1]
-    print('Total Energy: ', totalenergy)
-    print("Total Distance: ", distance, end='\n\n')
-    #print("Loop Count: ", loopcount)
+    print("Shortest path: ", end=' ')
     print(*path, sep=' -> ',end='\n\n')
+    print("Shortest Distance: ", distance, end='\n\n')
+    print('Total Energy: ', totalenergy)
+    print("Loop Count (for comparison): ", loopcount)
     print("Completed task.\n\n")

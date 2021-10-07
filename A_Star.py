@@ -70,8 +70,9 @@ def A_Star(graph, start, end, budget):
 
     # Reverse path
     path = path[::-1]
-    print('Total Energy: ', totalenergy)
-    print("Total Distance: ", distance, end='\n\n')
-    #print("Loop Count: ", loopcount)
+    print("Shortest path: ", end=' ')
     print(*path, sep=' -> ', end='\n\n')
+    print('Shortest Energy: ', totalenergy)
+    print("Total Distance: ", distance, end="\n\n")
+    print("Loop Count (for comparison) : ", loopcount)
     print("Completed task.\n\n")

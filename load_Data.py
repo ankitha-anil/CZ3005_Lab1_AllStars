@@ -1,6 +1,7 @@
 from collections import defaultdict
 import json
 
+
 class Graph():
     def __init__(self):
         """
@@ -21,7 +22,7 @@ class Graph():
         self.weights[(to_node, from_node)] = distance
 
 
-def loadDistgraph():
+def loadDistGraph():
     with open("content/Dist.json", "r") as json_file:
         distdata = json.load(json_file)
 
@@ -37,7 +38,8 @@ def loadDistgraph():
 
     return distgraph
 
-def loadcombinedGraph():
+
+def loadCombinedGraph():
     with open("content/Dist.json", "r") as dist_file:
         with open("content/Cost.json", "r") as cost_file:
             distdata = json.load(dist_file)
