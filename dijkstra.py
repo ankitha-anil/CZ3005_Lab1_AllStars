@@ -1,4 +1,6 @@
 def dijsktra(graph, start, end):
+    print("Loading task...\n")
+
     # shortest paths is a dict of nodes
     # whose value is a tuple of (previous node, weight)
     shortest_paths = {start: (None, 0)}
@@ -42,5 +44,6 @@ def dijsktra(graph, start, end):
 
     # Reverse path
     path = path[::-1]
-    print("Total : ", distance)
-    print(*path, sep=' -> ')
+    print("Total Distance: ", distance, end='\n\n')
+    print(*path, sep=' -> ', end='\n\n')
+    print("Completed task.\n\n")

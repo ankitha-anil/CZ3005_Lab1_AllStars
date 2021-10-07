@@ -1,4 +1,5 @@
-def dijsktra(graph, start, end, budget):
+def dijsktra_Budget(graph, start, end, budget):
+    print("Loading task...\n")
     # shortest paths is a dict of nodes
     # whose value is a tuple of (previous node, weight)
     shortest_paths = {start: (None, [0, 0])}
@@ -26,7 +27,6 @@ def dijsktra(graph, start, end, budget):
             else:
                 temp = shortest_paths[next_node]
                 current_shortest_weight = temp[1][0]
-                current_shortest_energy = temp[1][1]
                 if current_shortest_weight > weight:
                     shortest_paths[next_node] = (current_node, [weight, energy])
             loopcount += 1
@@ -54,6 +54,7 @@ def dijsktra(graph, start, end, budget):
     # Reverse path
     path = path[::-1]
     print('Total Energy: ', totalenergy)
-    print("Total Distance: ", distance)
-    print("Loop Count: ", loopcount)
-    print(*path, sep=' -> ')
+    print("Total Distance: ", distance, end='\n\n')
+    #print("Loop Count: ", loopcount)
+    print(*path, sep=' -> ',end='\n\n')
+    print("Completed task.\n\n")

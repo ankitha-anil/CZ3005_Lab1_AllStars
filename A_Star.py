@@ -2,6 +2,7 @@ import math
 import json
 
 def A_Star(graph, start, end, budget):
+    print("Loading task...\n")
     # shortest paths is a dict of nodes
     # whose value is a tuple of (previous node, weight)
     with open("content/coord.json", "r") as coord_file:
@@ -19,8 +20,6 @@ def A_Star(graph, start, end, budget):
     loopcount = 0
     totalenergy = 0
     distance = 0
-
-
 
 
     while current_node != end:
@@ -55,8 +54,7 @@ def A_Star(graph, start, end, budget):
         # next node is the destination with the lowest weight
         current_node = min(next_destinations, key=lambda k: next_destinations[k][1][2])
 
-# mylist = [[7, 8], [1, 2, 3], [2, 5, 6]]
-# list(map(lambda x: x[1], mylist)) returns [8, 2 ,5]
+
     # Work back through destinations in shortest path
     path = []
     while current_node is not None:
@@ -73,6 +71,7 @@ def A_Star(graph, start, end, budget):
     # Reverse path
     path = path[::-1]
     print('Total Energy: ', totalenergy)
-    print("Total Distance: ", distance)
-    print("Loop Count: ", loopcount)
-    print(*path, sep=' -> ')
+    print("Total Distance: ", distance, end='\n\n')
+    #print("Loop Count: ", loopcount)
+    print(*path, sep=' -> ', end='\n\n')
+    print("Completed task.\n\n")
